@@ -156,24 +156,6 @@ Fileboost handles errors gracefully:
 - **Invalid assets**: Logs errors when non-ActiveStorage objects are passed and returns empty strings/nil
 - **Signature errors**: Returns nil when HMAC generation fails
 
-## Rake Tasks
-
-### Verify Configuration
-
-```bash
-$ rake fileboost:verify
-```
-
-Tests configuration validity, worker connectivity, and signature generation.
-
-### Generate Test URL
-
-```bash
-$ rake fileboost:test_url[/path/to/image.jpg]
-```
-
-Generates a test Fileboost URL with sample parameters.
-
 ## Security
 
 Fileboost uses HMAC-SHA256 signatures to secure your image transformations:
