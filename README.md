@@ -1,0 +1,245 @@
+# Fileboost
+
+[![Gem Version](https://badge.fury.io/rb/fileboost.svg)](https://badge.fury.io/rb/fileboost)
+
+Fileboost is a Rails gem that provides seamless integration with the Fileboost.dev image optimization service. It offers drop-in replacement helpers for Rails' native image helpers with automatic optimization, HMAC authentication, and comprehensive transformation support for ActiveStorage objects.
+
+## Features
+
+- 🚀 **Drop-in replacement** for Rails `image_tag` and `url_for` helpers
+- 🔒 **Secure HMAC authentication** with Fileboost.dev service
+- 📱 **ActiveStorage only** - works exclusively with ActiveStorage attachments
+- 🎛️ **Comprehensive transformations** - resize, quality, format conversion, and more
+- 🔧 **Simple configuration** - just project ID and token required
+
+## Installation
+
+Register an account at [Fileboost.dev](https://fileboost.dev) and obtain your project ID and token.
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem "fileboost"
+```
+
+And then execute:
+
+```bash
+$ bundle install
+```
+
+Generate the initializer:
+
+```bash
+$ rails generate fileboost:install
+```
+
+## Configuration
+
+Set your environment variables:
+
+```bash
+export FILEBOOST_PROJECT_ID="your-project-id"
+export FILEBOOST_TOKEN="your-secret-token"
+```
+
+## Usage
+
+### Basic Image Tag
+
+Replace `image_tag` with `fileboost_image_tag` for ActiveStorage objects:
+
+```erb
+<!-- Before (Rails) -->
+<%= image_tag user.avatar, width: 300, height: 300, alt: "Avatar" %>
+
+<!-- After (Fileboost) -->
+<%= fileboost_image_tag user.avatar, resize: { w: 300, h: 300 }, alt: "Avatar" %>
+```
+
+**Note:** Fileboost only works with ActiveStorage objects. String paths and external URLs are not supported.
+
+### URL Generation
+
+Generate optimized URLs directly:
+
+```erb
+<div style="background-image: url(<%= fileboost_url_for(banner.image, resize: { w: 1200, h: 400 }) %>)">
+  <!-- content -->
+</div>
+```
+
+### Transformation Options
+
+Fileboost supports comprehensive image transformations:
+
+```erb
+<%= fileboost_image_tag post.image,
+      resize: {
+        width: 800,         # Resize width
+        height: 600,        # Resize height
+        quality: 85,        # JPEG/WebP quality (1-100)
+        blur: 5,            # Blur effect (0-100)
+        brightness: 110,    # Brightness adjustment (0-200, 100 = normal)
+        contrast: 120,      # Contrast adjustment (0-200, 100 = normal)
+        rotation: 90,       # Rotation in degrees (0-359)
+        fit: :cover         # Resize behavior (cover, contain, fill, scale-down, crop, pad)
+      },
+      class: "hero-image",  # Standard Rails options work too
+      alt: "Hero image" %>
+
+<!-- Short parameter names also work -->
+<%= fileboost_image_tag post.image,
+      resize: { w: 800, h: 600, q: 85 },
+      class: "hero-image" %>
+```
+
+### Parameter Aliases
+
+Use short or long parameter names within the resize parameter:
+
+```ruby
+# These are equivalent:
+fileboost_image_tag(image, resize: { w: 400, h: 300, q: 85 })
+fileboost_image_tag(image, resize: { width: 400, height: 300, quality: 85 })
+```
+
+**Note:** Avoid using the `format` parameter. Fileboost automatically selects the optimal image format (WebP, AVIF, JPEG, etc.) based on browser headers and capabilities for the best performance and compatibility.
+
+### ActiveStorage Support
+
+Works seamlessly with all ActiveStorage attachment types:
+
+```erb
+<!-- has_one_attached -->
+<%= fileboost_image_tag user.avatar, resize: { w: 150, h: 150, fit: :cover } %>
+
+<!-- has_many_attached -->
+<% post.images.each do |image| %>
+  <%= fileboost_image_tag image, resize: { width: 400, quality: 90 } %>
+<% end %>
+
+<!-- Direct blob access -->
+<%= fileboost_image_tag post.featured_image.blob, resize: { w: 800 } %>
+```
+
+### Responsive Images
+
+Generate multiple sizes for responsive designs:
+
+```ruby
+# In your controller or helper
+@responsive_urls = fileboost_responsive_urls(hero.image, [
+  { width: 400, suffix: "sm" },
+  { width: 800, suffix: "md" },
+  { width: 1200, suffix: "lg" }
+], resize: { quality: 85 })
+
+# Returns: { "sm" => "url1", "md" => "url2", "lg" => "url3" }
+```
+
+```erb
+<!-- In your view -->
+<img src="<%= @responsive_urls['md'] %>"
+     srcset="<%= @responsive_urls['sm'] %> 400w,
+             <%= @responsive_urls['md'] %> 800w,
+             <%= @responsive_urls['lg'] %> 1200w"
+     sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px"
+     alt="Responsive image">
+```
+
+## Error Handling
+
+Fileboost handles errors gracefully:
+
+- **Configuration errors**: Logs warnings about missing configuration and returns empty strings/nil
+- **Invalid assets**: Logs errors when non-ActiveStorage objects are passed and returns empty strings/nil
+- **Signature errors**: Returns nil when HMAC generation fails
+
+## Rake Tasks
+
+### Verify Configuration
+
+```bash
+$ rake fileboost:verify
+```
+
+Tests configuration validity, worker connectivity, and signature generation.
+
+### Generate Test URL
+
+```bash
+$ rake fileboost:test_url[/path/to/image.jpg]
+```
+
+Generates a test Fileboost URL with sample parameters.
+
+## Security
+
+Fileboost uses HMAC-SHA256 signatures to secure your image transformations:
+
+- URLs are signed with your secret token
+- Prevents unauthorized image manipulation
+- Signatures include all transformation parameters
+- Uses secure comparison to prevent timing attacks
+
+## Development
+
+After checking out the repo, run:
+
+```bash
+$ bundle install
+$ rake test
+```
+
+To test against the dummy Rails application:
+
+```bash
+$ cd test/dummy
+$ rails server
+```
+
+## Testing
+
+Run the test suite:
+
+```bash
+$ rake test
+```
+
+Run RuboCop:
+
+```bash
+$ bundle exec rubocop
+```
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Write tests for your changes
+4. Ensure all tests pass (`rake test`)
+5. Commit your changes (`git commit -am 'Add some feature'`)
+6. Push to the branch (`git push origin my-new-feature`)
+7. Create new Pull Request
+
+## Fileboost.dev Service
+
+To use Fileboost, you'll need access to the Fileboost.dev image optimization service at `cdn.fileboost.dev`. The service:
+
+1. Receives requests at `https://cdn.fileboost.dev/{project_id}/path/to/activestorage/blob`
+2. Verifies HMAC signatures using your secret token
+3. Applies transformations based on query parameters
+4. Returns optimized images
+
+The service handles ActiveStorage blob URLs and applies image transformations on-the-fly.
+
+## License
+
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+## Support
+
+- [GitHub Issues](https://github.com/bilalbudhani/fileboost/issues)
+- [Documentation](https://github.com/bilalbudhani/fileboost/wiki)
+- [Cloudflare Worker Setup Guide](https://github.com/bilalbudhani/fileboost-worker)

@@ -1,0 +1,27 @@
+require_relative "lib/fileboost/version"
+
+Gem::Specification.new do |spec|
+  spec.name        = "fileboost"
+  spec.version     = Fileboost::VERSION
+  spec.authors     = [ "bilal" ]
+  spec.email       = [ "bilal@bilalbudhani.com" ]
+  spec.homepage    = "https://github.com/bilalbudhani/fileboost-ruby"
+  spec.summary     = "Rails gem for Fileboost.dev image optimization with ActiveStorage"
+  spec.description = "Fileboost provides drop-in replacement Rails image helpers with automatic optimization through the Fileboost.dev service. Works exclusively with ActiveStorage objects, features HMAC authentication, and comprehensive transformation support."
+  spec.license     = "MIT"
+
+  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["source_code_uri"] = "https://github.com/bilalbudhani/fileboost-ruby"
+  spec.metadata["changelog_uri"] = "https://github.com/bilalbudhani/fileboost-ruby/blob/main/CHANGELOG.md"
+
+  spec.files = Dir.chdir(File.expand_path(__dir__)) do
+    Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+  end
+
+  spec.add_dependency "activestorage", ">= 6.0"
+
+  spec.add_development_dependency "bundler", ">= 1.15"
+  spec.add_development_dependency "combustion", ">= 1.1"
+  spec.add_development_dependency "rake", ">= 13.0"
+  spec.add_development_dependency "rails", "~> 8.0.0"
+end
