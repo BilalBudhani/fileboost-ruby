@@ -18,10 +18,12 @@ Gem::Specification.new do |spec|
     Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   end
 
-  spec.add_dependency "activestorage", ">= 6.0"
+  spec.required_ruby_version = ">= 3.0"
 
-  spec.add_development_dependency "bundler", ">= 1.15"
-  spec.add_development_dependency "combustion", ">= 1.1"
-  spec.add_development_dependency "rake", ">= 13.0"
+  spec.add_runtime_dependency "activestorage", ">= 6.0"
+
+  spec.add_development_dependency "bundler", "~> 1.15"
+  spec.add_development_dependency "combustion", "~> 1.1"
+  spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rails", "~> 8.0.0"
 end

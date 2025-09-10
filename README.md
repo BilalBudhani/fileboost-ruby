@@ -224,4 +224,3 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 - [GitHub Issues](https://github.com/bilalbudhani/fileboost/issues)
 - [Documentation](https://github.com/bilalbudhani/fileboost/wiki)
-- [Cloudflare Worker Setup Guide](https://github.com/bilalbudhani/fileboost-worker)
