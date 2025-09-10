@@ -205,17 +205,6 @@ $ bundle exec rubocop
 6. Push to the branch (`git push origin my-new-feature`)
 7. Create new Pull Request
 
-## Fileboost.dev Service
-
-To use Fileboost, you'll need access to the Fileboost.dev image optimization service at `cdn.fileboost.dev`. The service:
-
-1. Receives requests at `https://cdn.fileboost.dev/{project_id}/path/to/activestorage/blob`
-2. Verifies HMAC signatures using your secret token
-3. Applies transformations based on query parameters
-4. Returns optimized images
-
-The service handles ActiveStorage blob URLs and applies image transformations on-the-fly.
-
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
