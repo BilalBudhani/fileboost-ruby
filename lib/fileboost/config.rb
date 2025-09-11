@@ -11,7 +11,7 @@ module Fileboost
     end
 
     def valid?
-      project_id.present? && token.present?
+      !project_id.empty? && !token.empty?
     end
 
     def base_url

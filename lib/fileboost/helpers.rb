@@ -18,9 +18,6 @@ module Fileboost
       # Generate the optimized URL
       optimized_url = fileboost_url_for(asset, resize: resize_options)
 
-      # Return empty string if no URL could be generated
-      return "" if optimized_url.blank?
-
       # Use the optimized URL with Rails image_tag for consistency
       image_tag(optimized_url, **options)
     end
@@ -36,16 +33,10 @@ module Fileboost
     #   fileboost_url_for(user.avatar.blob, resize: { w: 1200, h: 400, q: 85 })
     def fileboost_url_for(asset, **options)
       # Validate that asset is an ActiveStorage object
-      unless valid_activestorage_asset?(asset)
-        Rails.logger.error("[Fileboost] Invalid asset type #{asset.class}. Only ActiveStorage objects are supported.") if defined?(Rails)
-        return nil
-      end
+      raise ArgumentError, "Invalid asset type #{asset.class}. Only ActiveStorage objects are supported." unless valid_activestorage_asset?(asset)
 
       # Validate configuration
-      unless Fileboost.config.valid?
-        log_configuration_warning
-        return nil
-      end
+      raise Fileboost::ConfigurationError, "Invalid Fileboost configuration" unless Fileboost.config.valid?
 
       # Build the optimized URL
       Fileboost::UrlBuilder.build_url(asset, **options)
@@ -71,10 +62,13 @@ module Fileboost
       sizes.each do |size_config|
         suffix = size_config[:suffix] || size_config["suffix"]
         size_options = size_config.except(:suffix, "suffix")
-        combined_options = base_options.merge(size_options)
+
+        # Merge size options into base resize options
+        merged_resize_options = (base_options[:resize] || {}).merge(size_options)
+        combined_options = base_options.merge(resize: merged_resize_options)
 
         url = fileboost_url_for(asset, **combined_options)
-        urls[suffix] = url if url.present?
+        urls[suffix] = url if !url.nil? && !url.empty?
       end
 
       urls
@@ -90,18 +84,6 @@ module Fileboost
       return true if asset.is_a?(ActiveStorage::VariantWithRecord)
 
       false
-    end
-
-    # Log configuration warnings
-    def log_configuration_warning
-      missing_configs = []
-      missing_configs << "project_id" if Fileboost.config.project_id.blank?
-      missing_configs << "token" if Fileboost.config.token.blank?
-
-      Rails.logger.warn(
-        "[Fileboost] Configuration incomplete. Missing: #{missing_configs.join(', ')}. " \
-        "Set FILEBOOST_PROJECT_ID and FILEBOOST_TOKEN environment variables or configure them in your initializer."
-      ) if defined?(Rails)
     end
   end
 end
