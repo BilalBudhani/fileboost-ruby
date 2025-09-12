@@ -305,7 +305,7 @@ PLATFORMS
 DEPENDENCIES
   activestorage (~> 7.1.0)
   appraisal (~> 2.5)
-  bundler (~> 2)
+  bundler (>= 2.1, < 2.7)
   combustion (~> 1)
   fileboost!
   propshaft
@@ -318,4 +318,4 @@ DEPENDENCIES
   sqlite3
 
 BUNDLED WITH
-   2.7.1
+   2.6.9
