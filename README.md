@@ -6,11 +6,12 @@ Fileboost is a Rails gem that provides seamless integration with the Fileboost.d
 
 ## Features
 
-- 🚀 **Drop-in replacement** for Rails `image_tag` and `url_for` helpers
+- 🚀 **Drop-in replacement** for Rails `image_tag` with zero code changes (NEW in v0.2.0)
 - 🔒 **Secure HMAC authentication** with Fileboost.dev service
 - 📱 **ActiveStorage only** - works exclusively with ActiveStorage attachments
 - 🎛️ **Comprehensive transformations** - resize, quality, format conversion, and more
 - 🔧 **Simple configuration** - just project ID and token required
+- 🔄 **Automatic fallback** - non-ActiveStorage images work exactly as before
 
 ## Installation
 
@@ -43,11 +44,54 @@ export FILEBOOST_PROJECT_ID="your-project-id"
 export FILEBOOST_TOKEN="your-secret-token"
 ```
 
+Or configure directly in your initializer:
+
+```ruby
+# config/initializers/fileboost.rb
+Fileboost.configure do |config|
+  config.project_id = ENV["FILEBOOST_PROJECT_ID"]
+  config.token = ENV["FILEBOOST_TOKEN"]
+  
+  # Optional: Enable drop-in replacement for Rails image_tag (default: false)
+  config.patch_image_tag = true
+end
+```
+
 ## Usage
 
-### Basic Image Tag
+### Drop-in Replacement (Recommended)
 
-Replace `image_tag` with `fileboost_image_tag` for ActiveStorage objects:
+Enable `patch_image_tag` in your configuration to automatically optimize ActiveStorage images with your existing `image_tag` calls:
+
+```ruby
+# config/initializers/fileboost.rb
+Fileboost.configure do |config|
+  config.project_id = ENV["FILEBOOST_PROJECT_ID"]
+  config.token = ENV["FILEBOOST_TOKEN"]
+  config.patch_image_tag = true  # Enable automatic optimization
+end
+```
+
+With this enabled, your existing Rails code automatically gets Fileboost optimization:
+
+```erb
+<!-- This now automatically uses Fileboost for ActiveStorage objects -->
+<%= image_tag user.avatar, resize: { w: 300, h: 300 }, alt: "Avatar" %>
+<%= image_tag post.featured_image, resize: { width: 800, quality: 85 }, class: "hero" %>
+
+<!-- Non-ActiveStorage images work exactly as before -->
+<%= image_tag "/assets/logo.png", alt: "Logo" %>
+<%= image_tag "https://example.com/image.jpg", alt: "External" %>
+```
+
+**Benefits:**
+- Zero code changes required for existing ActiveStorage images
+- Automatic fallback to Rails behavior for non-ActiveStorage assets
+- Gradual migration path - enable/disable with single configuration option
+
+### Manual Helper Method
+
+Alternatively, use `fileboost_image_tag` explicitly for ActiveStorage objects:
 
 ```erb
 <!-- Before (Rails) -->
@@ -171,7 +215,7 @@ After checking out the repo, run:
 
 ```bash
 $ bundle install
-$ rake test
+$ bundle exec rspec
 ```
 
 To test against the dummy Rails application:
@@ -186,7 +230,7 @@ $ rails server
 Run the test suite:
 
 ```bash
-$ rake test
+$ bundle exec rspec
 ```
 
 Run RuboCop:

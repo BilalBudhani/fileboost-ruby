@@ -16,4 +16,10 @@ Fileboost.configure do |config|
   # You can also set this via the FILEBOOST_TOKEN environment variable
   # IMPORTANT: Keep this secret secure and never commit it to version control
   config.token = ENV["FILEBOOST_TOKEN"] # || "your-secret-token"
+
+  # Drop-in replacement for Rails image_tag helper
+  # When enabled, image_tag will automatically use Fileboost optimization
+  # for ActiveStorage assets while falling back to standard Rails behavior
+  # for other image sources. Defaults to false.
+  # config.patch_image_tag = true
 end

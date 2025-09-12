@@ -1,6 +1,6 @@
 module Fileboost
   class Config
-    attr_accessor :project_id, :token
+    attr_accessor :project_id, :token, :patch_image_tag
 
     CDN_DOMAIN = "cdn.fileboost.dev"
     BASE_URL = "https://#{CDN_DOMAIN}"
@@ -8,6 +8,7 @@ module Fileboost
     def initialize
       @project_id = ENV["FILEBOOST_PROJECT_ID"]
       @token = ENV["FILEBOOST_TOKEN"]
+      @patch_image_tag = false
     end
 
     def valid?
