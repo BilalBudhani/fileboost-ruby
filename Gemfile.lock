@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fileboost (0.1.5)
+    fileboost (0.2.0.pre)
       activestorage (>= 6.0)
 
 GEM
