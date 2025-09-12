@@ -178,7 +178,7 @@ fileboost_image_tag(image, resize: { w: 400, h: 300, q: 85 })
 fileboost_image_tag(image, resize: { width: 400, height: 300, quality: 85 })
 ```
 
-**Note:** Avoid using the `format` parameter. Fileboost automatically selects the optimal image format (WebP, AVIF, JPEG, etc.) based on browser headers and capabilities for the best performance and compatibility.
+**🎯 Smart Optimization:** Fileboost's CDN automatically detects and delivers the optimal image format (WebP, AVIF, JPEG, etc.) based on browser capabilities, device type, and connection speed for maximum performance.
 
 ### ActiveStorage Support
 
@@ -215,10 +215,9 @@ Fileboost now provides full support for ActiveStorage variants with automatic tr
 <!-- Complex variants with multiple transformations -->
 <%= image_tag post.image.variant(
   resize_to_limit: [600, 400],
-  quality: 85,
-  format: :webp
+  quality: 85
 ) %>
-<!-- ↓ Automatically becomes: w=600&h=400&fit=scale-down&q=85&f=webp -->
+<!-- ↓ Automatically becomes: w=600&h=400&fit=scale-down&q=85 -->
 
 <!-- Named variants work seamlessly -->
 <%= image_tag user.avatar.variant(:thumb) %>
@@ -236,8 +235,8 @@ Fileboost automatically maps ActiveStorage variant transformations to optimized 
 | `resize_to_fill: [w, h]` | `w=W&h=H&fit=cover` | Resize and crop to fill exactly |
 | `resize_and_pad: [w, h]` | `w=W&h=H&fit=pad` | Resize with padding |
 | `quality: 85` | `q=85` | JPEG/WebP quality (1-100) |
-| `format: :webp` | `f=webp` | Output format |
 | `rotate: "-90"` | `r=-90` | Rotation in degrees |
+
 
 #### Combining Variants with Custom Options
 
