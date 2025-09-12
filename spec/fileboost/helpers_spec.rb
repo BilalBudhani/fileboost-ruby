@@ -37,6 +37,29 @@ RSpec.describe Fileboost::Helpers do
       expect(url).to include("w=300")
     end
 
+    it "generates URL for ActiveStorage variant" do
+      variant = blob.variant(resize_to_limit: [ 100, 100 ])
+
+      url = fileboost_url_for(variant)
+
+      expect(url).to include("https://cdn.fileboost.dev")
+      expect(url).to include("w=100")
+      expect(url).to include("h=100")
+      expect(url).to include("fit=scale-down")
+    end
+
+    it "generates URL for named variants" do
+      user.avatar.attach(blob)
+      thumb_variant = user.avatar.variant(:thumb)
+
+      url = fileboost_url_for(thumb_variant)
+
+      expect(url).to include("https://cdn.fileboost.dev")
+      expect(url).to include("w=100")
+      expect(url).to include("h=100")
+      expect(url).to include("fit=scale-down")
+    end
+
     it "raises ArgumentError for invalid asset type" do
       expect {
         fileboost_url_for("invalid", resize: { w: 300 })
@@ -59,6 +82,25 @@ RSpec.describe Fileboost::Helpers do
       result = fileboost_image_tag(blob, resize: { w: 300 }, alt: "test")
 
       expect(result).to eq('<img src="optimized_url" alt="test">')
+    end
+
+    it "generates image tag for variants" do
+      variant = blob.variant(resize_to_limit: [ 100, 100 ])
+      allow(self).to receive(:image_tag).and_return('<img src="variant_url" alt="test">')
+
+      result = fileboost_image_tag(variant, alt: "test")
+
+      expect(result).to eq('<img src="variant_url" alt="test">')
+    end
+
+    it "generates image tag for named variants" do
+      user.avatar.attach(blob)
+      thumb_variant = user.avatar.variant(:thumb)
+      allow(self).to receive(:image_tag).and_return('<img src="thumb_url" alt="test">')
+
+      result = fileboost_image_tag(thumb_variant, alt: "test")
+
+      expect(result).to eq('<img src="thumb_url" alt="test">')
     end
   end
 

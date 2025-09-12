@@ -46,6 +46,25 @@ RSpec.describe Fileboost::ImageTagPatch do
         expect(result).to eq('<img src="fileboost_url" alt="avatar">')
       end
 
+      it "uses fileboost_image_tag for ActiveStorage::VariantWithRecord" do
+        variant = blob.variant(resize_to_limit: [ 100, 100 ])
+        expect(view_instance).to receive(:fileboost_image_tag).with(variant, alt: "variant").and_return('<img src="fileboost_variant_url" alt="variant">')
+
+        result = view_instance.image_tag(variant, alt: "variant")
+
+        expect(result).to eq('<img src="fileboost_variant_url" alt="variant">')
+      end
+
+      it "uses fileboost_image_tag for named variants" do
+        user.avatar.attach(blob)
+        thumb_variant = user.avatar.variant(:thumb)
+        expect(view_instance).to receive(:fileboost_image_tag).with(thumb_variant, alt: "thumb").and_return('<img src="fileboost_thumb_url" alt="thumb">')
+
+        result = view_instance.image_tag(thumb_variant, alt: "thumb")
+
+        expect(result).to eq('<img src="fileboost_thumb_url" alt="thumb">')
+      end
+
       it "passes through all options to fileboost_image_tag" do
         options = { alt: "test", class: "hero-image", data: { id: "123" }, resize: { w: 300 } }
         expect(view_instance).to receive(:fileboost_image_tag).with(blob, **options).and_return('<img src="fileboost_url">')
