@@ -33,9 +33,6 @@ jobs:
           - ruby-version: "3.0"
             rails-version: "rails-8-0"
 
-    env:
-      BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.rails-version }}.gemfile
-
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config

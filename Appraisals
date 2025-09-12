@@ -11,6 +11,6 @@ appraise "rails-7-2" do
 end
 
 appraise "rails-8-0" do
-  gem "rails", ">= 8.0.0.alpha"
-  gem "activestorage", ">= 8.0.0.alpha"
+  gem "rails", "~> 8.0.0"
+  gem "activestorage", "~> 8.0.0"
 end
