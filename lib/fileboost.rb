@@ -2,8 +2,10 @@ require "fileboost/version"
 require "fileboost/config"
 require "fileboost/error_handler"
 require "fileboost/signature_generator"
+require "fileboost/variant_transformer"
 require "fileboost/url_builder"
 require "fileboost/helpers"
+require "fileboost/image_tag_patch"
 require "fileboost/engine"
 
 module Fileboost
