@@ -7,6 +7,7 @@ Fileboost is a Rails gem that provides seamless integration with the Fileboost.d
 ## Table of Contents
 
 - [Features](#features)
+- [Requirements](#requirements)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
@@ -37,6 +38,12 @@ Fileboost is a Rails gem that provides seamless integration with the Fileboost.d
 - 🎛️ **Comprehensive transformations** - resize, quality, format conversion, and more
 - 🔧 **Simple configuration** - just project ID and token required
 - 🔄 **Automatic fallback** - non-ActiveStorage images work exactly as before
+
+## Requirements
+
+- Ruby 3.0+
+- Rails 7.1+
+- ActiveStorage
 
 ## Installation
 

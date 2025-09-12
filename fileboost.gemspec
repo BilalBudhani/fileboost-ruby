@@ -20,12 +20,13 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 3.0"
 
-  spec.add_runtime_dependency "activestorage", ">= 6.0"
+  spec.add_runtime_dependency "activestorage", ">= 7.1"
 
-  spec.add_development_dependency "bundler", "~> 2"
+  spec.add_development_dependency "appraisal", "~> 2.5"
+  spec.add_development_dependency "bundler", ">= 2.1", "< 2.7"
   spec.add_development_dependency "combustion", "~> 1"
   spec.add_development_dependency "rake", "~> 13.0"
-  spec.add_development_dependency "rails", "~> 8.0.0"
+  spec.add_development_dependency "rails", ">= 7.1"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "rspec-rails", "~> 6.0"
   spec.add_development_dependency "sqlite3", "~> 2.0"
