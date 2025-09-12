@@ -5,14 +5,14 @@ Gem::Specification.new do |spec|
   spec.version     = Fileboost::VERSION
   spec.authors     = [ "bilal" ]
   spec.email       = [ "bilal@bilalbudhani.com" ]
-  spec.homepage    = "https://github.com/bilalbudhani/fileboost-ruby"
+  spec.homepage    = "https://github.com/Fileboost/fileboost-ruby"
   spec.summary     = "Rails gem for Fileboost.dev image optimization with ActiveStorage"
   spec.description = "Fileboost provides drop-in replacement Rails image helpers with automatic optimization through the Fileboost.dev service. Works exclusively with ActiveStorage objects, features HMAC authentication, and comprehensive transformation support."
   spec.license     = "MIT"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/bilalbudhani/fileboost-ruby"
-  spec.metadata["changelog_uri"] = "https://github.com/bilalbudhani/fileboost-ruby/blob/main/CHANGELOG.md"
+  spec.metadata["source_code_uri"] = "https://github.com/Fileboost/fileboost-ruby"
+  spec.metadata["changelog_uri"] = "https://github.com/Fileboost/fileboost-ruby/blob/main/CHANGELOG.md"
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]

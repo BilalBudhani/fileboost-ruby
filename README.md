@@ -349,5 +349,5 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Support
 
-- [GitHub Issues](https://github.com/bilalbudhani/fileboost/issues)
-- [Documentation](https://github.com/bilalbudhani/fileboost/wiki)
+- [GitHub Issues](https://github.com/Fileboost/fileboost-ruby/issues)
+- [Documentation](https://github.com/Fileboost/fileboost-ruby/wiki)

@@ -27,6 +27,6 @@ Next steps:
 5. Or use explicit helpers:
    <%= fileboost_image_tag user.avatar, resize: {w: 300, h: 200, fit: "cover"} %>
 
-For documentation, visit: https://github.com/bilalbudhani/fileboost
+For documentation, visit: https://github.com/Fileboost/fileboost-ruby
 
 ===============================================================================
