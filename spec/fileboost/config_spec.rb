@@ -10,9 +10,16 @@ RSpec.describe Fileboost::Config do
 
       expect(config.project_id).to eq("test_project")
       expect(config.token).to eq("test_token")
+      expect(config.patch_image_tag).to eq(false)
 
       ENV.delete("FILEBOOST_PROJECT_ID")
       ENV.delete("FILEBOOST_TOKEN")
+    end
+
+    it "sets patch_image_tag to false by default" do
+      config = Fileboost::Config.new
+
+      expect(config.patch_image_tag).to eq(false)
     end
   end
 

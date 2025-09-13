@@ -43,7 +43,7 @@ module Fileboost
       full_path = "/#{project_id}#{asset_path}"
 
       # Extract and normalize transformation parameters
-      transformation_params = extract_transformation_params(options)
+      transformation_params = extract_transformation_params(asset, options)
 
       # Generate HMAC signature for secure authentication
       signature = Fileboost::SignatureGenerator.generate(
@@ -89,10 +89,16 @@ module Fileboost
       end
     end
 
-    def self.extract_transformation_params(options)
+    def self.extract_transformation_params(asset, options)
       params = {}
 
-      # Only handle nested resize parameter
+      # First, extract variant transformations if this is a variant
+      if asset.is_a?(ActiveStorage::VariantWithRecord)
+        variant_params = Fileboost::VariantTransformer.transform_variant_params(asset)
+        params.merge!(variant_params)
+      end
+
+      # Then handle explicit resize parameter (this can override variant params)
       if options[:resize].is_a?(Hash)
         resize_options = options[:resize]
         resize_options.each do |key, value|
@@ -117,9 +123,13 @@ module Fileboost
 
     def self.normalize_param_value(key, value)
       case key
-      when "w", "h", "q", "b", "br", "c", "r"
+      when "w", "h", "b", "br", "c", "r"
         # Numeric parameters
         value.to_i.to_s if value.to_i > 0
+      when "q"
+        # Quality parameter - validate range 1-100
+        q = value.to_i
+        (q > 0 && q <= 100) ? q.to_s : nil
       when "f"
         # Format parameter - validate against common formats
         valid_formats = %w[webp jpeg jpg png gif avif]
