@@ -93,7 +93,7 @@ end
 
 ### Drop-in Replacement (Recommended)
 
-Enable `patch_image_tag` in your configuration to automatically optimize ActiveStorage images with your existing `image_tag` calls:
+> Enable `patch_image_tag` in your configuration to automatically optimize ActiveStorage images with your existing `image_tag` calls:
 
 ```ruby
 # config/initializers/fileboost.rb
