@@ -42,7 +42,7 @@ Fileboost is a Rails gem that provides seamless integration with the Fileboost.d
 ## Requirements
 
 - Ruby 3.0+
-- Rails 7.1+
+- Rails 7+
 - ActiveStorage
 
 ## Installation
@@ -83,7 +83,7 @@ Or configure directly in your initializer:
 Fileboost.configure do |config|
   config.project_id = ENV["FILEBOOST_PROJECT_ID"]
   config.token = ENV["FILEBOOST_TOKEN"]
-  
+
   # Optional: Enable drop-in replacement for Rails image_tag (default: false)
   config.patch_image_tag = true
 end
@@ -121,6 +121,7 @@ With this enabled, your existing Rails code automatically gets Fileboost optimiz
 ```
 
 **Benefits:**
+
 - Zero code changes required for existing ActiveStorage images
 - Full ActiveStorage variant support with automatic transformation mapping
 - Automatic fallback to Rails behavior for non-ActiveStorage assets
@@ -235,15 +236,14 @@ Fileboost now provides full support for ActiveStorage variants with automatic tr
 
 Fileboost automatically maps ActiveStorage variant transformations to optimized URL parameters:
 
-| ActiveStorage Variant | Fileboost Parameters | Description |
-|----------------------|---------------------|-------------|
-| `resize_to_limit: [w, h]` | `w=W&h=H&fit=scale-down` | Resize within bounds, preserving aspect ratio |
-| `resize_to_fit: [w, h]` | `w=W&h=H&fit=contain` | Resize to fit exactly, with letterboxing if needed |
-| `resize_to_fill: [w, h]` | `w=W&h=H&fit=cover` | Resize and crop to fill exactly |
-| `resize_and_pad: [w, h]` | `w=W&h=H&fit=pad` | Resize with padding |
-| `quality: 85` | `q=85` | JPEG/WebP quality (1-100) |
-| `rotate: "-90"` | `r=-90` | Rotation in degrees |
-
+| ActiveStorage Variant     | Fileboost Parameters     | Description                                        |
+| ------------------------- | ------------------------ | -------------------------------------------------- |
+| `resize_to_limit: [w, h]` | `w=W&h=H&fit=scale-down` | Resize within bounds, preserving aspect ratio      |
+| `resize_to_fit: [w, h]`   | `w=W&h=H&fit=contain`    | Resize to fit exactly, with letterboxing if needed |
+| `resize_to_fill: [w, h]`  | `w=W&h=H&fit=cover`      | Resize and crop to fill exactly                    |
+| `resize_and_pad: [w, h]`  | `w=W&h=H&fit=pad`        | Resize with padding                                |
+| `quality: 85`             | `q=85`                   | JPEG/WebP quality (1-100)                          |
+| `rotate: "-90"`           | `r=-90`                  | Rotation in degrees                                |
 
 #### Combining Variants with Custom Options
 
@@ -251,13 +251,13 @@ You can combine variant transformations with additional Fileboost options:
 
 ```erb
 <!-- Variant transformations + additional options -->
-<%= image_tag user.avatar.variant(resize_to_limit: [200, 200]), 
+<%= image_tag user.avatar.variant(resize_to_limit: [200, 200]),
     resize: { blur: 5, brightness: 110 } %>
 <!-- ↓ Combines variant params with additional blur and brightness -->
 
 <!-- Override variant parameters -->
 <%= image_tag post.image.variant(resize_to_limit: [400, 300]),
-    resize: { w: 500 } %>  
+    resize: { w: 500 } %>
 <!-- ↓ Uses h=300&fit=scale-down from variant, but overrides width to 500 -->
 ```
 
