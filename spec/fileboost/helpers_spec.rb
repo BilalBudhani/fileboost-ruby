@@ -60,6 +60,12 @@ RSpec.describe Fileboost::Helpers do
       expect(url).to include("fit=scale-down")
     end
 
+    it "includes disposition parameter when provided" do
+      url = fileboost_url_for(blob, disposition: :attachment)
+
+      expect(url).to include("disposition=attachment")
+    end
+
     it "raises ArgumentError for invalid asset type" do
       expect {
         fileboost_url_for("invalid", resize: { w: 300 })
