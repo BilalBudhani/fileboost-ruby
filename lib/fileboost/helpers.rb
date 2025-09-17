@@ -5,7 +5,7 @@ module Fileboost
     # Generate an optimized image tag using Fileboost
     #
     # @param asset [ActiveStorage::Blob, ActiveStorage::Attached, ActiveStorage::VariantWithRecord] The ActiveStorage image asset
-    # @param options [Hash] Image transformation and HTML options
+    # @param options [Hash] Accepts a `:resize` hash for transformations plus standard HTML options
     # @return [String] HTML image tag
     #
     # Examples:
@@ -25,7 +25,7 @@ module Fileboost
     # Generate an optimized URL using Fileboost
     #
     # @param asset [ActiveStorage::Blob, ActiveStorage::Attached, ActiveStorage::VariantWithRecord] The ActiveStorage image asset
-    # @param options [Hash] Image transformation options
+    # @param options [Hash] Supports a `:resize` hash for image transformations and an optional `:disposition`
     # @return [String, nil] The optimized URL or nil if generation failed
     #
     # Examples:

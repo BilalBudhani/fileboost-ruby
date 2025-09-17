@@ -118,6 +118,11 @@ module Fileboost
         end
       end
 
+      disposition = options[:disposition] || options["disposition"]
+      if disposition.present?
+        params["disposition"] = disposition.to_s.strip.downcase
+      end
+
       params
     end
 
