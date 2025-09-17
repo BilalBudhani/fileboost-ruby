@@ -150,5 +150,24 @@ RSpec.describe Fileboost::UrlBuilder do
         expect(url).to include("fit=scale-down")
       end
     end
+
+    context "with disposition parameter" do
+      it "includes disposition in URL but excludes from signature generation" do
+        # Generate URLs with and without disposition
+        url_without_disposition = Fileboost::UrlBuilder.build_url(blob, resize: { w: 300 })
+        url_with_disposition = Fileboost::UrlBuilder.build_url(blob, resize: { w: 300 }, disposition: "attachment")
+
+        # Extract signatures from both URLs
+        sig_without = URI.decode_www_form(URI.parse(url_without_disposition).query).to_h["sig"]
+        sig_with = URI.decode_www_form(URI.parse(url_with_disposition).query).to_h["sig"]
+
+        # Signatures should be identical (disposition not affecting signature)
+        expect(sig_without).to eq(sig_with)
+
+        # But the URL with disposition should include the disposition parameter
+        expect(url_with_disposition).to include("disposition=attachment")
+        expect(url_without_disposition).not_to include("disposition=")
+      end
+    end
   end
 end

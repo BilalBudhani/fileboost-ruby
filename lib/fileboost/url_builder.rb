@@ -45,7 +45,10 @@ module Fileboost
       # Extract and normalize transformation parameters
       transformation_params = extract_transformation_params(asset, options)
 
-      # Generate HMAC signature for secure authentication
+      # Separate disposition from transformation params for signature generation
+      disposition = transformation_params.delete("disposition")
+
+      # Generate HMAC signature for secure authentication (excluding disposition)
       signature = Fileboost::SignatureGenerator.generate(
         asset_path: asset_path,
         params: transformation_params
@@ -53,8 +56,9 @@ module Fileboost
 
       raise SignatureGenerationError, "Failed to generate signature" unless signature
 
-      # Add signature to parameters
+      # Add signature and disposition back to final URL parameters
       all_params = transformation_params.merge("sig" => signature)
+      all_params["disposition"] = disposition if disposition
 
       # Build final URL
       uri = URI.join(base_url, full_path)
