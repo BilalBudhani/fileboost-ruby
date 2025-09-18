@@ -161,6 +161,7 @@ Fileboost supports comprehensive image transformations:
         width: 800,         # Resize width
         height: 600,        # Resize height
         quality: 85,        # JPEG/WebP quality (1-100)
+        format: "jpg",      # Force specific format (jpg, png, webp, avif)
         blur: 5,            # Blur effect (0-100)
         brightness: 110,    # Brightness adjustment (0-200, 100 = normal)
         contrast: 120,      # Contrast adjustment (0-200, 100 = normal)
@@ -172,7 +173,7 @@ Fileboost supports comprehensive image transformations:
 
 <!-- Short parameter names also work -->
 <%= fileboost_image_tag post.image,
-      resize: { w: 800, h: 600, q: 85 },
+      resize: { w: 800, h: 600, q: 85, f: "jpg" },
       class: "hero-image" %>
 ```
 
@@ -182,11 +183,13 @@ Use short or long parameter names within the resize parameter:
 
 ```ruby
 # These are equivalent:
-fileboost_image_tag(image, resize: { w: 400, h: 300, q: 85 })
-fileboost_image_tag(image, resize: { width: 400, height: 300, quality: 85 })
+fileboost_image_tag(image, resize: { w: 400, h: 300, q: 85, f: "jpg" })
+fileboost_image_tag(image, resize: { width: 400, height: 300, quality: 85, format: "jpg" })
 ```
 
 **🎯 Smart Optimization:** Fileboost's CDN automatically detects and delivers the optimal image format (WebP, AVIF, JPEG, etc.) based on browser capabilities, device type, and connection speed for maximum performance.
+
+**⚠️ Format Parameter Usage:** The `format` parameter should only be used in non-browser-facing scenarios (API responses, webhooks, server-to-server communication, etc.). For browser-facing images, omit the format parameter to allow Fileboost to automatically serve the best format for each user's browser and connection.
 
 ### ActiveStorage Support
 
